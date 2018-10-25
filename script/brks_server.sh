@@ -173,7 +173,14 @@ failure() {
 case "$1" in
    start)
       [ -x ${BACFDBIN}/brks ] && {
-	    echo "Starting the brks daemon"
+      	if [ -x ${PIDOF} ] ; then
+      	   pid=`${PIDOF} $1`
+		    fi
+		    if [ "$pid" != "" ] ; then
+		       echo "$base (pid $pid) is running..."
+		       return 0
+		    fi
+	      echo "Starting the brks daemon"
 		    ${BACFDBIN}/brks  ${BACFDCFG}/log.conf > ${PIDDIR}/brk_start.log &
       }
       ;;
